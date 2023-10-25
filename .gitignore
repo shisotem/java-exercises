@@ -1,0 +1,8 @@
+.vscode
+
+*.class
+
+*.docx
+*.pdf
+
+04/package
