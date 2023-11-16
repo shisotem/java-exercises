@@ -6,6 +6,7 @@ import java.util.*;
 public class ExpMain {
 
     public static void main(String[] args) {
+        Map<String, Expression> state = new HashMap<String, Expression>();
         try {
             BufferedReader br = new BufferedReader(
                     new InputStreamReader(System.in));  // 標準入力
@@ -21,13 +22,22 @@ public class ExpMain {
                 }
                 if (t.str.equals("set")) {  // setコマンドで名前と式の対応を定義できる
                     // 1) 次のトークンを取得する（名前のはず）
+                    Token nameToken = tokenizer.nextToken();
                     // 2) この行の残りを構文解析して式（Expressionオブジェクト）を取得する
+                    Parser parser = new Parser(tokenizer);
+                    Expression exp = parser.parseExpression();
                     // 3) 式の構文木を出力する（確認用）
+                    exp.print();
                     // 4) 名前の文字列と式の対応関係を状態（Map）に登録する
+                    state.put(nameToken.str, exp);
                 } else if (t.str.equals("eval")) {  // evalコマンドで式の値を計算する
                     // 1) まず，この行の残りを構文解析して式（Expressionオブジェクト）を取得する
+                    Parser parser = new Parser(tokenizer);
+                    Expression exp = parser.parseExpression();
                     // 2) 式の構文木を出力する（確認用）
+                    exp.print();
                     // 3) 式にevalメソッドを適用して式の値を求め，出力する
+                    System.out.println(exp.eval(state));
                 } else {  // コマンドが無い場合は，入力された式の構文木を出力する
                     tokenizer.backToken();  // トークンtを読まなかったことにする
                     Parser parser = new Parser(tokenizer);

@@ -10,9 +10,17 @@ public class Term extends Node {
 
     // 指定された状態（state）での式の値を求めるメソッド
     double eval(Map<String, Expression> state) {
-        // 処理内容を考えて
-        // ここに実装する
+        double value = childList.get(0).eval(state);
+        for (int i = 1; i < childList.size(); i += 2) {
+            Token t = (Token) childList.get(i);
+            Factor f = (Factor) childList.get(i + 1);
 
-        return 0; // これはダミー
+            if (t.str.equals("*")) {
+                value *= f.eval(state);
+            } else {
+                value /= f.eval(state);
+            }
+        }
+        return value;
     }
 }
